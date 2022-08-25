@@ -4,8 +4,8 @@ import java.util.*;
 import java.io.*;
 
 public class User {
-	private String username;
-	private String password;
+	String username;
+	String password;
 
 	// Creates a User with empty name and password.
 	public User() {
@@ -31,10 +31,10 @@ public class User {
 	// This function must still return false if given an empty username string.
 	public boolean check(String usr, String psd) {
 		boolean hasLogin = false;
-		if (usr != username || usr == "") {
+		if (!usr.equals(username) || usr.equals("")) {
 			return hasLogin;
 		} else {
-			if (psd != password) {
+			if (!psd.equals(password)) {
 				return hasLogin;
 			} else {
 				hasLogin = true;
@@ -49,17 +49,11 @@ public class User {
 	// Also, a default User cannot have its password changed.
 	// Return true if password changed, return false if not.
 	public boolean setPassword(String oldPass, String newPass) {
-		boolean hasLogin = false;
-		if (oldPass != password || oldPass == "") {
-			return hasLogin;
+		if (oldPass.equals(password)) {
+			password.equals(newPass);
+			return true;
 		} else {
-			password = newPass;
-			hasLogin = true;
-			return hasLogin;
+			return false;
 		}
-	}
-
-	public String toString() {
-		return username;
 	}
 }

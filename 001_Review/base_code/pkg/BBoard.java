@@ -7,10 +7,18 @@ import java.io.*;
 public class BBoard { // This is your main file that connects all classes.
 	Scanner sc = new Scanner(System.in);
 
+	User currentUser;
+
 	ArrayList<String> username = new ArrayList<String>();
 
 	ArrayList<String> password = new ArrayList<String>();
 
+	String userPassword;
+
+	public void Quit() {
+		System.out.println("Bye!");
+		System.exit(0);
+	}
 	// Think about what your global variables need to be.
 
 	// Default constructor that creates a board with a defaulttitle, empty user and
@@ -34,7 +42,6 @@ public class BBoard { // This is your main file that connects all classes.
 
 		Scanner fileReader = new Scanner(users);
 
-		int arrPos = 0;
 		while (fileReader.hasNextLine()) {
 			String line = fileReader.nextLine();
 			int lineLength = line.length();
@@ -42,9 +49,6 @@ public class BBoard { // This is your main file that connects all classes.
 			username.add(line.substring(0, spacePos));
 			spacePos++;
 			password.add(line.substring(spacePos, lineLength));
-			// System.out.println("Username: " + username.get(arrPos) + ", Password: " +
-			// password.get(arrPos));
-			arrPos++;
 		}
 	}
 
@@ -63,14 +67,14 @@ public class BBoard { // This is your main file that connects all classes.
 			System.out.println("Enter your username ('Q' or 'q' to quit):");
 			String userUsername = sc.nextLine();
 			if (userUsername.equals("q") || userUsername.equals("Q")) {
-				System.out.println("Bye!");
-				System.exit(0);
+				Quit();
 			}
 			System.out.println("Enter your password:");
-			String userPassword = sc.nextLine();
+			userPassword = sc.nextLine();
 			for (int c = 0; c < username.size(); c++) {
 				if (userUsername.equals(username.get(c)) && userPassword.equals(password.get(c))) {
 					System.out.println("Welcome back " + userUsername);
+					currentUser = new User(userUsername, userPassword);
 					hasLogin = true;
 					return;
 				}
@@ -116,8 +120,10 @@ public class BBoard { // This is your main file that connects all classes.
 			setPassword();
 		}
 		if (input.equals("Q") || input.equals("q")) {
-			System.out.println("Bye!");
-			System.exit(0);
+			Quit();
+		} else {
+			System.out.println("Enter a valid option.");
+			run();
 		}
 	}
 
@@ -209,7 +215,30 @@ public class BBoard { // This is your main file that connects all classes.
 	// Once entered, the user will be told "Password Accepted." and returned to the
 	// menu.
 	private void setPassword() {
-
+		System.out.println("Enter your old password: ");
+		String newPas;
+		String oldPas = sc.nextLine();
+		if (oldPas.equals("C") || oldPas.equals("c")) {
+			run();
+		} else if (currentUser.check(currentUser.getUsername(), oldPas)) {
+			System.out.println("Enter your new password: ");
+			newPas = sc.nextLine();
+			if (newPas.equals(oldPas)) {
+				System.out.println("Your password cannot be the same as your old password.");
+				setPassword();
+			}
+			if (newPas.equals("")) {
+				System.out.println("Enter a valid password.");
+				setPassword();
+			}
+			if (currentUser.setPassword(oldPas, newPas)) {
+				System.out.println("Password accepted.");
+				currentUser = new User(currentUser.getUsername(), newPas);
+				run();
+			}
+		} else {
+			System.out.println("Wrong password, try again or return to menu ('C' or 'c')");
+			setPassword();
+		}
 	}
-
 }
