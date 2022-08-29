@@ -10,6 +10,7 @@ public class Message {
 	int i;
 	int messageID;
 	String subject;
+	User currentUser;
 
 	// Default Constructor
 	public Message() {
@@ -39,7 +40,10 @@ public class Message {
 	// 1, the reply should be indented 2 spaces,
 	// if it's 2, indent by 4 spaces, etc.
 	public void print(int indentation) {
-
+		System.out.println("-----------------------------");
+		System.out.println("Message #" + messageID + ": \"" + subject + " \" ");
+		System.out.println("From " + currentUser.getUsername() + ": \"" + +"\" ");
+		System.out.println("-----------------------------");
 	}
 
 	// Default function for inheritance
