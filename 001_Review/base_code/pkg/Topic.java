@@ -11,18 +11,12 @@ public class Topic extends Message {
 
 	// Default Constructor
 	public Topic() {
-		auth = "";
-		subj = "";
-		bod = "";
-		i = 0;
+
 	}
 
 	// Parameterized constructor
 	public Topic(String auth, String subj, String bod, int i) {
-		this.auth = auth;
-		this.subj = subj;
-		this.bod = bod;
-		this.i = i;
+		super(auth, subj, bod, i + 1);
 	}
 
 	// Returns if it's a reply (false)

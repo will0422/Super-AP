@@ -13,6 +13,12 @@ public class BBoard { // This is your main file that connects all classes.
 
 	ArrayList<String> password = new ArrayList<String>();
 
+	ArrayList<Message> messageList = new ArrayList<Message>();
+
+	String empty = "empty";
+
+	int zero = 0;
+
 	String userPassword;
 
 	public void Quit() {
@@ -121,10 +127,13 @@ public class BBoard { // This is your main file that connects all classes.
 		}
 		if (input.equals("Q") || input.equals("q")) {
 			Quit();
-		} else {
-			System.out.println("Enter a valid option.");
-			run();
 		}
+		if (!input.equals("d") || !input.equals("D") || !input.equals("n") || !input.equals("N") || !input.equals("R")
+				|| !input.equals("r") || !input.equals("P") || !input.equals("p") || !input.equals("Q")
+				|| !input.equals("q")) {
+			System.out.println("Enter a valid option.");
+		}
+		run();
 	}
 
 	// Traverse the BBoard's message list, and invote the print function on Topic
@@ -133,7 +142,17 @@ public class BBoard { // This is your main file that connects all classes.
 	// function recursively on its own replies
 	// The BBoard display function will ignore all reply objects in its message list
 	private void display() {
+		Message msg = new Message();
 
+		System.out.println("-----------------------------------------------");
+		for (int c = 0; c < messageList.size(); c++) {
+			msg = messageList.get(c);
+
+			if (msg.isReply() == false) {
+				msg.print(0);
+			}
+		}
+		System.out.println("-----------------------------------------------");
 	}
 
 	// This function asks the user to create a new Topic (i.e. the first message of
@@ -154,7 +173,20 @@ public class BBoard { // This is your main file that connects all classes.
 	// Once the Topic has been constructed, add it to the messageList
 	// This should invoke your inheritance of Topic to Message
 	private void addTopic() {
+		System.out.println("Subject: ");
 
+		String sub = sc.nextLine();
+
+		System.out.println("Body: ");
+
+		String bod = sc.nextLine();
+
+		int c = messageList.size();
+
+		String auth = currentUser.getUsername();
+
+		Topic t = new Topic(auth, sub, bod, c);
+		messageList.add(t);
 	}
 
 	// This function asks the user to enter a reply to a given Message (which may be
@@ -199,7 +231,29 @@ public class BBoard { // This is your main file that connects all classes.
 	// Note: When the user chooses to return to the menu, do not call run() again -
 	// just return fro mthis addReply function.
 	private void addReply() {
+		System.out.println("Enter Message ID: ");
+		int replyID = sc.nextInt();
+		replyID++;
 
+		if (replyID > messageList.size() || replyID < 0) {
+			System.out.println("Invalid ID");
+			addReply();
+		} else {
+			System.out.println("Body: ");
+			String bod = sc.nextLine();
+
+			int c = messageList.size();
+			String user = currentUser.getUsername();
+
+			String sub = "Re: " + messageList.get(replyID - 1).getSubject();
+
+			Reply r = new Reply(user, sub, bod, c);
+
+			messageList.get(replyID - 1).addChild(r);
+
+			messageList.add(r);
+		}
+		return;
 	}
 
 	// This function allows the user to change their current password.

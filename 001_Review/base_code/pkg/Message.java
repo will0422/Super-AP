@@ -11,6 +11,7 @@ public class Message {
 	int messageID;
 	String subject;
 	User currentUser;
+	ArrayList<Message> childsList = new ArrayList<Message>();
 
 	// Default Constructor
 	public Message() {
@@ -25,7 +26,7 @@ public class Message {
 		this.auth = auth;
 		this.subj = subj;
 		this.bod = bod;
-		this.i = i;
+		this.i = i + 1;
 	}
 
 	// This function is responsbile for printing the Message
@@ -40,10 +41,20 @@ public class Message {
 	// 1, the reply should be indented 2 spaces,
 	// if it's 2, indent by 4 spaces, etc.
 	public void print(int indentation) {
-		System.out.println("-----------------------------");
-		System.out.println("Message #" + messageID + ": \"" + subject + " \" ");
-		System.out.println("From " + currentUser.getUsername() + ": \"" + +"\" ");
-		System.out.println("-----------------------------");
+		int indent = indentation;
+		String ind = "";
+
+		for (int c = 0; c < indent; c++) {
+			ind = (ind + "  ");
+		}
+
+		System.out.println(ind + "Message #" + i + ": Subject: " + subj);
+		System.out.println(ind + "User: " + auth + " said: " + bod);
+
+		for (int c = 0; c < childsList.size(); c++) {
+			indent = indentation + 1;
+			childsList.get(c).print(indent);
+		}
 	}
 
 	// Default function for inheritance
@@ -63,7 +74,7 @@ public class Message {
 
 	// Adds a child pointer to the parent's childList.
 	public void addChild(Message child) {
-
+		childsList.add(child);
 	}
 
 }
